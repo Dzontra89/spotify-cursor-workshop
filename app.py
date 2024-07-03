@@ -23,7 +23,7 @@ class SpotifyWorkshopStack(Stack):
         internal_bucket = s3.Bucket(self, "InternalBucket")
 
         # Output S3 bucket
-        output_bucket = s3.Bucket(self, "OutputBucket")
+        output_bucket = s3.Bucket(self, "OutputBucket", public_read_access=True)
 
         # SQS queue
         queue = sqs.Queue(self, "MyQueue")
