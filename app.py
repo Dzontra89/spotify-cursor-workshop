@@ -8,16 +8,12 @@ from aws_cdk import (
     aws_lambda_event_sources as lambda_events,
     aws_s3_notifications as s3n,
     aws_iam as iam,
-    aws_ec2 as ec2,
 )
 from constructs import Construct
 
 class SpotifyWorkshopStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-
-        # Create a VPC
-        vpc = ec2.Vpc(self, "MyVpc", max_azs=2)
 
         # Internal S3 bucket
         internal_bucket = s3.Bucket(self, "InternalBucket")
@@ -37,7 +33,7 @@ class SpotifyWorkshopStack(Stack):
             environment={
                 "OUTPUT_BUCKET": output_bucket.bucket_name
             },
-            vpc=vpc
+            timeout=cdk.Duration.minutes(15)  # Set timeout to maximum (15 minutes)
         )
 
         # Grant Lambda permissions
