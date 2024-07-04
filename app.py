@@ -21,6 +21,16 @@ class SpotifyWorkshopStack(Stack):
         # Output S3 bucket
         output_bucket = s3.Bucket(self, "OutputBucket", public_read_access=True)
 
+        # Add bucket policy for public access
+        output_bucket.add_to_resource_policy(
+            iam.PolicyStatement(
+                actions=["s3:GetObject"],
+                resources=[f"{output_bucket.bucket_arn}/*"],
+                principals=[iam.AnyPrincipal()],
+                effect=iam.Effect.ALLOW
+            )
+        )
+
         # SQS queue
         queue = sqs.Queue(self, "MyQueue")
 
